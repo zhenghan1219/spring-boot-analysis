@@ -33,3 +33,16 @@ build/
 .vscode/
 
 spring-boot-project/spring-boot-actuator-autoconfigure/src/test
+spring-boot-project/spring-boot/src/test
+spring-boot-project/spring-boot-actuator/src/test
+spring-boot-project/spring-boot-autoconfigure/src/test
+spring-boot-project/spring-boot-cli/src/test
+spring-boot-project/spring-boot-dependencies/src/test
+spring-boot-project/spring-boot-devtools/src/test
+spring-boot-project/spring-boot-docs/src/test
+spring-boot-project/spring-boot-parent/src/test
+spring-boot-project/spring-boot-properties-migrator/src/test
+spring-boot-project/spring-boot-starters/src/test
+spring-boot-project/spring-boot-test/src/test
+spring-boot-project/spring-boot-test-autoconfigure/src/test
+spring-boot-project/spring-boot-tools/src/test
