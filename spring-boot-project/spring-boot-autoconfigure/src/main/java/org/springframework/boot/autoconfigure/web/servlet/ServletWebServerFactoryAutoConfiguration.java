@@ -57,9 +57,13 @@ import org.springframework.web.filter.ForwardedHeaderFilter;
  */
 @Configuration(proxyBeanMethods = false)
 @AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
+//
 @ConditionalOnClass(ServletRequest.class)
+//web应用类型，servlet
 @ConditionalOnWebApplication(type = Type.SERVLET)
+//能够完成属性注入，里边有server,port等，在application.properties中可以配置
 @EnableConfigurationProperties(ServerProperties.class)
+//EmbeddedJetty和EmbeddedUndertow有@ConditionXXX,代表需要满足条件才会进行，没有导入jetty和undertow，所以会过滤掉
 @Import({ ServletWebServerFactoryAutoConfiguration.BeanPostProcessorsRegistrar.class,
 		ServletWebServerFactoryConfiguration.EmbeddedTomcat.class,
 		ServletWebServerFactoryConfiguration.EmbeddedJetty.class,

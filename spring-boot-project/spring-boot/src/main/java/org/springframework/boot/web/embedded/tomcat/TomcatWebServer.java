@@ -103,6 +103,7 @@ public class TomcatWebServer implements WebServer {
 				});
 
 				// Start the server to trigger initialization listeners
+				//启动创建的Tomcat
 				this.tomcat.start();
 
 				// We can re-throw failure exception directly in the main thread
@@ -196,10 +197,13 @@ public class TomcatWebServer implements WebServer {
 				addPreviouslyRemovedConnectors();
 				Connector connector = this.tomcat.getConnector();
 				if (connector != null && this.autoStart) {
+					//启动哪些在Tomcat启动时就需要启动SERVLET
 					performDeferredLoadOnStartup();
 				}
+				//检查Connector是都都已经启动
 				checkThatConnectorsHaveStarted();
 				this.started = true;
+				//控制台日志
 				logger.info("Tomcat started on port(s): " + getPortsDescription(true) + " with context path '"
 						+ getContextPath() + "'");
 			}

@@ -30,6 +30,7 @@ import org.springframework.util.ReflectionUtils;
  * A collection of {@link SpringApplicationRunListener}.
  *
  * @author Phillip Webb
+ * springboot启动各个阶段的方法
  */
 class SpringApplicationRunListeners {
 
@@ -42,18 +43,21 @@ class SpringApplicationRunListeners {
 		this.listeners = new ArrayList<>(listeners);
 	}
 
+	//在run()方法开始执行时，该方法就立即被调用，可用于在初始化最早期时做一些工作
 	void starting() {
 		for (SpringApplicationRunListener listener : this.listeners) {
 			listener.starting();
 		}
 	}
 
+	//当environment构建完成，ApplicationContext创建之前，该方法被调用
 	void environmentPrepared(ConfigurableEnvironment environment) {
 		for (SpringApplicationRunListener listener : this.listeners) {
 			listener.environmentPrepared(environment);
 		}
 	}
 
+	//当ApplicationContext构建完成时，该方法被调用
 	void contextPrepared(ConfigurableApplicationContext context) {
 		for (SpringApplicationRunListener listener : this.listeners) {
 			listener.contextPrepared(context);

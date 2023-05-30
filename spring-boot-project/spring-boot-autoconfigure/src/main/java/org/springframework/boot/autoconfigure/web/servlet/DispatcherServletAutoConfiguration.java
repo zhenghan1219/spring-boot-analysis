@@ -67,6 +67,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication(type = Type.SERVLET)
 @ConditionalOnClass(DispatcherServlet.class)
+//该类是在ServletWebServerFactoryAutoConfiguration类加载之后才会加载，ServletWebServerFactoryAutoConfiguration配置和启动tomcat
 @AutoConfigureAfter(ServletWebServerFactoryAutoConfiguration.class)
 public class DispatcherServletAutoConfiguration {
 
@@ -80,12 +81,23 @@ public class DispatcherServletAutoConfiguration {
 	 */
 	public static final String DEFAULT_DISPATCHER_SERVLET_REGISTRATION_BEAN_NAME = "dispatcherServletRegistration";
 
+	/**
+	 * 内部类
+	 * 创建一个DispatcherServlet
+	 *
+	 */
 	@Configuration(proxyBeanMethods = false)
 	@Conditional(DefaultDispatcherServletCondition.class)
 	@ConditionalOnClass(ServletRegistration.class)
 	@EnableConfigurationProperties({ HttpProperties.class, WebMvcProperties.class })
 	protected static class DispatcherServletConfiguration {
 
+		/**
+		 * 生成一个dispatcherServlet并保存到IOC容器中，没有添加到ServletContext中
+		 * @param httpProperties
+		 * @param webMvcProperties
+		 * @return DispatcherServlet ，前端控制器
+		 */
 		@Bean(name = DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
 		public DispatcherServlet dispatcherServlet(HttpProperties httpProperties, WebMvcProperties webMvcProperties) {
 			DispatcherServlet dispatcherServlet = new DispatcherServlet();
@@ -97,6 +109,11 @@ public class DispatcherServletAutoConfiguration {
 			return dispatcherServlet;
 		}
 
+		/**
+		 * 重命名
+		 * @param resolver
+		 * @return
+		 */
 		@Bean
 		@ConditionalOnBean(MultipartResolver.class)
 		@ConditionalOnMissingBean(name = DispatcherServlet.MULTIPART_RESOLVER_BEAN_NAME)
@@ -107,6 +124,10 @@ public class DispatcherServletAutoConfiguration {
 
 	}
 
+	/**
+	 * 内部类
+	 *
+	 */
 	@Configuration(proxyBeanMethods = false)
 	@Conditional(DispatcherServletRegistrationCondition.class)
 	@ConditionalOnClass(ServletRegistration.class)
@@ -114,10 +135,21 @@ public class DispatcherServletAutoConfiguration {
 	@Import(DispatcherServletConfiguration.class)
 	protected static class DispatcherServletRegistrationConfiguration {
 
+		/**
+		 * 注册DispatcherServlet
+		 * @param dispatcherServlet
+		 * @param webMvcProperties
+		 * @param multipartConfig
+		 * @return DispatcherServletRegistrationBean ：DispatcherServlet的一个注册类，
+		 * 负责将DispatcherServlet注册到ServletContext中
+		 *
+		 *
+		 */
 		@Bean(name = DEFAULT_DISPATCHER_SERVLET_REGISTRATION_BEAN_NAME)
 		@ConditionalOnBean(value = DispatcherServlet.class, name = DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
 		public DispatcherServletRegistrationBean dispatcherServletRegistration(DispatcherServlet dispatcherServlet,
 				WebMvcProperties webMvcProperties, ObjectProvider<MultipartConfigElement> multipartConfig) {
+
 			DispatcherServletRegistrationBean registration = new DispatcherServletRegistrationBean(dispatcherServlet,
 					webMvcProperties.getServlet().getPath());
 			registration.setName(DEFAULT_DISPATCHER_SERVLET_BEAN_NAME);
